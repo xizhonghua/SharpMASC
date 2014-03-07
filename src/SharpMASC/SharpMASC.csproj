@@ -40,11 +40,13 @@
     <Compile Include="Utils\Timer.cs" />
     <Compile Include="Display\WindowBase.cs" />
     <Compile Include="Display\Camera.cs" />
+    <Compile Include="Extension\VectorExtension.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Utils\" />
     <Folder Include="Display\" />
+    <Folder Include="Extension\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

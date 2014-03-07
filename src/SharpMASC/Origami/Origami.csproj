@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D424145A-889B-469B-A29F-A8DFEC6E9C74}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SharpMasc.Origami</RootNamespace>
+    <RootNamespace>SharpMASC.Origami</RootNamespace>
     <AssemblyName>Origami</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
