@@ -1,7 +1,8 @@
 ﻿using System;
-using SharpMasc.Origami.Display;
+using SharpMASC.Origami.Display;
+using SharpMASC.Origami.Model;
 
-namespace SharpMasc.Origami
+namespace SharpMASC.Origami
 {
 	class MainClass
 	{
@@ -24,8 +25,12 @@ namespace SharpMasc.Origami
 				return;
 			}
 
-			using (var w = new MainWindow ()) {
-				w.Title = "Origami";
+			var origami = new Origami.Model.RigidOrigami ();
+
+			origami.Build (args [0]);
+
+			using (var w = new MainWindow (origami)) {
+				w.Title = "Origami " + args [0];
 				w.Run (60d);
 			}
 

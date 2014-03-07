@@ -19,7 +19,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <Commandlineparameters>waterbomb.obj</Commandlineparameters>
+    <Commandlineparameters>comp/miura_3_3.obj</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -39,11 +39,11 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\Origami.cs" />
     <Compile Include="Model\Face.cs" />
     <Compile Include="Model\Crease.cs" />
     <Compile Include="Model\Vertex.cs" />
     <Compile Include="Display\MainWindow.cs" />
+    <Compile Include="Model\RigidOrigami.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

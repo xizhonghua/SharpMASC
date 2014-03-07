@@ -70,7 +70,7 @@ namespace SharpMASC.Origami.Model
 		{
 			this.CreaseId = creaseId;
 			this.CreaseType = CreaseType.Boundary;
-			this.Refer = null;
+			this.Refer = this;
 			this.GoalFoldingAngles = new List<double> ();
 		}
 
@@ -80,7 +80,7 @@ namespace SharpMASC.Origami.Model
 
 		public void UpdatePlaneAngles ()
 		{
-			var x = new Vector3 (1, 0, 0);
+			var x = new Vector3d (1, 0, 0);
 			var v1 = (this.V1 - this.V2);
 			v1.Normalize ();
 			var v2 = -v1;
@@ -131,10 +131,10 @@ namespace SharpMASC.Origami.Model
 			var n1 = this.F1.Normal;
 			var n2 = this.F2.Normal;
 
-			var dot = Vector3.Dot (n1, n2);
+			var dot = Vector3d.Dot (n1, n2);
 			var alpha = Math.Acos (dot);
 
-			double dot2 = Vector3.Dot ((F1.Center - F2.Center), n2);
+			double dot2 = Vector3d.Dot ((F1.Center - F2.Center), n2);
 
 			if (Math.Abs (alpha) < 0.01)
 				alpha = 0;
@@ -143,6 +143,16 @@ namespace SharpMASC.Origami.Model
 				alpha = -alpha;
 
 			return alpha;
+		}
+
+		public double GetPlaneAngle (int witnessId)
+		{
+			if (witnessId == this.V1.VertexId)
+				return this.PlaneAngle1;
+			if (witnessId == this.V2.VertexId)
+				return this.PlaneAngle2;
+
+			throw new ArgumentException ("witnessId");
 		}
 
 		#endregion

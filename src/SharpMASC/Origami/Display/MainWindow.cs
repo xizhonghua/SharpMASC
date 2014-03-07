@@ -1,10 +1,11 @@
 ﻿using System;
-using SharpMASC.Display;
-using OpenTK.Graphics.OpenGL;
-using OpenTK;
 using System.Drawing;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using SharpMASC.Display;
+using SharpMASC.Origami.Model;
 
-namespace SharpMasc.Origami.Display
+namespace SharpMASC.Origami.Display
 {
 	public class MainWindow: WindowBase
 	{
@@ -55,6 +56,13 @@ namespace SharpMasc.Origami.Display
 		}
 
 		#endregion
+
+		public RigidOrigami Origami { get; private set; }
+
+		public MainWindow (RigidOrigami origami)
+		{
+			this.Origami = origami;
+		}
 
 		protected override void Init ()
 		{

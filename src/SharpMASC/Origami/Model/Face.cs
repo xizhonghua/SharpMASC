@@ -18,15 +18,15 @@ namespace SharpMASC.Origami.Model
 
 		public Face ParentFace { get; set; }
 
-		public Vector3 Normal {
+		public Vector3d Normal {
 			get { 
 				var e2 = Vertices [2].Position - Vertices [0].Position;
 				var e1 = Vertices [1].Position - Vertices [1].Position;
-				return Vector3.Cross (e2, e1);
+				return Vector3d.Cross (e2, e1);
 			}
 		}
 
-		public Vector3 Center {
+		public Vector3d Center {
 			get {
 				return (this.Vertices [0].Position + this.Vertices [1].Position + this.Vertices [2].Position) / 3;
 			}
@@ -56,6 +56,14 @@ namespace SharpMASC.Origami.Model
 			}
 
 			return false;
+		}
+
+		public bool Contains (Vertex v1, Vertex v2)
+		{
+			if (v1 == v2)
+				return false;
+
+			return this.Contains (v1) && this.Contains (v2);
 		}
 
 		/// <summary>
