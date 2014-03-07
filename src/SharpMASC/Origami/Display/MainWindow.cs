@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Drawing;
-using OpenTK;
 using SharpMASC.Display;
 using OpenTK.Graphics.OpenGL;
+using OpenTK;
+using System.Drawing;
 
-namespace Examples
+namespace SharpMasc.Origami.Display
 {
-	public class Window : WindowBase
+	public class MainWindow: WindowBase
 	{
 		#region implemented abstract members of WindowBase
 
@@ -62,17 +62,6 @@ namespace Examples
 
 			// change the backgroun color
 			this.BackgroundColor = Color.Gray;
-		}
-	}
-
-	public class TestWIndow
-	{
-		[STAThread]
-		public static void Main (string[] args)
-		{
-			using (var w = new Window ()) {
-				w.Run (30, 0);
-			}
 		}
 	}
 }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "Examples\Examples.csproj", "{4FFB17D0-F3C8-4130-A570-ABBE142BD6F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Origami", "Origami\Origami.csproj", "{D424145A-889B-469B-A29F-A8DFEC6E9C74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,9 +27,13 @@ Global
 		{C506654C-1BFE-4DF8-B872-6EF408EF81E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C506654C-1BFE-4DF8-B872-6EF408EF81E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C506654C-1BFE-4DF8-B872-6EF408EF81E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D424145A-889B-469B-A29F-A8DFEC6E9C74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D424145A-889B-469B-A29F-A8DFEC6E9C74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D424145A-889B-469B-A29F-A8DFEC6E9C74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D424145A-889B-469B-A29F-A8DFEC6E9C74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Examples\Examples.csproj
+		StartupItem = Origami\Origami.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = Hierarchical
