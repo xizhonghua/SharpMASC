@@ -123,10 +123,12 @@ namespace SharpMASC.Origami.Model
 				return;
 			}
 
-			var c = new Crease (this.cid++);
-
-			c.V1 = this.Vertices [vid1];
-			c.V2 = this.Vertices [vid2];
+            var c = new Crease(this.cid++)
+            {
+                CreaseType = creaseType,
+                V1 = this.Vertices [vid1],
+                V2 = this.Vertices [vid2]
+            };
 
 			for (var i = 3; i < items.Length; ++i) {
 				var goalAngle = Math.Abs (double.Parse (items [i]));

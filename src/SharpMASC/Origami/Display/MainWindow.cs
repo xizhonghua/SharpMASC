@@ -36,6 +36,7 @@ namespace SharpMASC.Origami.Display
 		void DrawAll ()
 		{
 			this.DrawFaces ();
+            this.DrawCreases();
 		}
 
 		void DrawFaces ()
@@ -67,6 +68,32 @@ namespace SharpMASC.Origami.Display
 			for (var i = 0; i < 3; i++)
 				GL.Vertex3 (f.Vertices [i].Position);
 		}
+
+        void DrawCreases()
+        {
+            GL.Begin(PrimitiveType.Lines);
+            Origami.Creases.ForEach(DrawCrease);
+            GL.End();
+        }
+
+        void DrawCrease(Crease c)
+        {
+            if (c.IsMountain)
+            {
+                GL.Color3(1.0f, 0, 0);
+            }
+            else if (c.IsValley)
+            {
+                GL.Color3(0, 0, 1.0f);
+            }
+            else
+            {
+                GL.Color3(0.5f, 0.5f, 0.5f);
+            }
+
+            GL.Vertex3(c.V1.Position);
+            GL.Vertex3(c.V2.Position);
+        }
 
 		#endregion
 
