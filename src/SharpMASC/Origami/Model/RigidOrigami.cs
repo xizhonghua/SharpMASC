@@ -16,6 +16,15 @@ namespace SharpMASC.Origami.Model
 
 		public List<Face> Faces { get; private set; }
 
+		public Vector3d COM {
+			get { 
+				var com = new Vector3d ();
+				this.Faces.ForEach (f => com += f.Center);
+				com /= this.Faces.Count;
+				return com;
+			}
+		}
+
 		#endregion
 
 		#region Fields

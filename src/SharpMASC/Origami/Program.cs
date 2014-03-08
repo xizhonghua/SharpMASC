@@ -25,7 +25,7 @@ namespace SharpMASC.Origami
 				return;
 			}
 
-			var origami = new Origami.Model.RigidOrigami ();
+			var origami = new RigidOrigami ();
 
 			origami.Build (args [0]);
 

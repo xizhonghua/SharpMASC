@@ -16,48 +16,59 @@ namespace SharpMASC.Origami.Display
 			// Write your render code here
 
 			GL.PushMatrix ();
-			GL.Translate (-0.5, -0.5, -0.5);
 
-
-			#region Draw a Cube
-
-			GL.Begin (PrimitiveType.LineLoop);
-			GL.Vertex3 (0, 0, 0);
-			GL.Vertex3 (1, 0, 0);
-			GL.Vertex3 (1, 1, 0);
-			GL.Vertex3 (0, 1, 0);
-			GL.End ();
-
-			GL.Begin (PrimitiveType.LineLoop);
-			GL.Vertex3 (0, 0, 1);
-			GL.Vertex3 (1, 0, 1);
-			GL.Vertex3 (1, 1, 1);
-			GL.Vertex3 (0, 1, 1);
-			GL.End ();
-
-			GL.Begin (PrimitiveType.Lines);
-			GL.Vertex3 (0, 0, 0);
-			GL.Vertex3 (0, 0, 1);
-
-			GL.Vertex3 (1, 0, 0);
-			GL.Vertex3 (1, 0, 1);
-
-			GL.Vertex3 (1, 1, 0);
-			GL.Vertex3 (1, 1, 1);
-
-			GL.Vertex3 (0, 1, 0);
-			GL.Vertex3 (0, 1, 1);
-			GL.End ();
-
-			#endregion
-
+			GL.Translate (-this.Origami.COM);
+			this.DrawAll ();
 
 			GL.PopMatrix ();
 		}
 
 		#endregion
 
+		#region propetry
+
 		public RigidOrigami Origami { get; private set; }
+
+		#endregion
+
+		#region Private
+
+		void DrawAll ()
+		{
+			this.DrawFaces ();
+		}
+
+		void DrawFaces ()
+		{
+			GL.Enable (EnableCap.PolygonOffsetFill);
+			GL.PolygonOffset (0.5f, 0.5f);
+
+			GL.Enable (EnableCap.CullFace);
+
+			GL.CullFace (CullFaceMode.Front);
+			GL.Color3 (1.0f, 1.0f, 1.0f);
+			GL.Begin (PrimitiveType.Triangles);
+			this.Origami.Faces.ForEach (this.DrawFace);
+			GL.End ();
+
+			GL.CullFace (CullFaceMode.Back);
+
+			GL.Color3 (0.8f, 0.8f, 0.8f);
+			GL.Begin (PrimitiveType.Triangles);
+			this.Origami.Faces.ForEach (this.DrawFace);
+			GL.End ();
+
+			GL.Disable (EnableCap.PolygonOffsetFill);
+			GL.Disable (EnableCap.CullFace);
+		}
+
+		void DrawFace (Face f)
+		{
+			for (var i = 0; i < 3; i++)
+				GL.Vertex3 (f.Vertices [i].Position);
+		}
+
+		#endregion
 
 		public MainWindow (RigidOrigami origami)
 		{

@@ -3,6 +3,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK.Input;
+using OpenTK.Graphics;
 
 namespace SharpMASC.Display
 {
@@ -29,6 +30,11 @@ namespace SharpMASC.Display
 		protected float R { get; set; }
 
 		#endregion
+
+		public WindowBase () : base (800, 600, new GraphicsMode (32, 24, 0, 8))
+		{
+
+		}
 
 		#region Abstract Methods
 
