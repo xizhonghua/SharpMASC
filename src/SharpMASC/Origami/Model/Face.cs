@@ -85,8 +85,8 @@ namespace SharpMASC.Origami.Model
 		/// <param name="f">F.</param>
 		public bool CrossCCW (Vertex v, Face f)
 		{
-			var v1 = (this.Center - v.Position).ToVector2 ();
-			var v2 = (f.Center - v.Position).ToVector2 ();
+			var v1 = (this.Center - v).ToVector2 ();
+			var v2 = (f.Center - v).ToVector2 ();
 
 			v1.Normalize ();
 			v2.Normalize ();
@@ -95,6 +95,16 @@ namespace SharpMASC.Origami.Model
 
 			return cross > 0;
 		}
+
+        public override int GetHashCode()
+        {
+            return this.FaceId.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Face {0}", FaceId);
+        }
 
 		#endregion
 	}

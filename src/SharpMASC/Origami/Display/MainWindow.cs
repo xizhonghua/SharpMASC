@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using SharpMASC.Display;
 using SharpMASC.Origami.Model;
@@ -29,7 +30,9 @@ namespace SharpMASC.Origami.Display
 
 		public RigidOrigami Origami { get; private set; }
 
-		#endregion
+        public DisplayConfig DC { get; private set; }
+
+		#endregion        
 
 		#region Private
 
@@ -37,6 +40,7 @@ namespace SharpMASC.Origami.Display
 		{
 			this.DrawFaces ();
             this.DrawCreases();
+            this.DrawFaceIds();
 		}
 
 		void DrawFaces ()
@@ -91,8 +95,15 @@ namespace SharpMASC.Origami.Display
                 GL.Color3(0.5f, 0.5f, 0.5f);
             }
 
+            if (c.IsAssistant && !this.DC.ShowAssistantCreases) return;
+
             GL.Vertex3(c.V1.Position);
             GL.Vertex3(c.V2.Position);
+        }
+
+        void DrawFaceIds()
+        {
+            
         }
 
 		#endregion
@@ -100,7 +111,26 @@ namespace SharpMASC.Origami.Display
 		public MainWindow (RigidOrigami origami)
 		{
 			this.Origami = origami;
+            this.DC = new DisplayConfig();
 		}
+
+        protected override void OnUpdateFrame(FrameEventArgs e)
+        {
+            //if (Keyboard[OpenTK.Input.Key.A])
+            //{
+            //    DC.ShowAssistantCreases = !DC.ShowAssistantCreases;
+            //}
+
+            base.OnUpdateFrame(e);
+        }
+
+        protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
+        {
+            if(e.Key == OpenTK.Input.Key.A)
+                DC.ShowAssistantCreases = !DC.ShowAssistantCreases;
+
+            base.OnKeyDown(e);
+        }
 
 		protected override void Init ()
 		{
