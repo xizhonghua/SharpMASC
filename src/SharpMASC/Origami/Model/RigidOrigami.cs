@@ -95,12 +95,7 @@ namespace SharpMASC.Origami.Model
 
             Console.WriteLine("Vertices = {0}/{1}", this.Vertices.Count, this.RealVertices.Count);
 			Console.WriteLine ("Faces = {0}", this.Faces.Count);
-			Console.WriteLine ("Creases = {0}", this.Creases.Count);
-
-            Faces.ForEach(f =>
-            {
-                Console.WriteLine("fid = {0} parent = {1}", f.FaceId, f.ParentFace == null ? -1 : f.ParentFace.FaceId);
-            });
+			Console.WriteLine ("Creases = {0}", this.Creases.Count);          
 		}
 
 		#endregion
@@ -177,7 +172,7 @@ namespace SharpMASC.Origami.Model
 
 			c.GoalFoldingAngles.Insert (0, c.FoldingAngle);
 
-			this.Creases.Add (c);
+			this.Creases.Add (c);            
 		}
 
         void ComputePlaneAngles()
@@ -200,23 +195,23 @@ namespace SharpMASC.Origami.Model
 
             Creases.ForEach(c =>
                 {
-                    if(!this.pathGraph.ContainsKey(c.F1))
+                    if (!this.pathGraph.ContainsKey(c.F1))
                     {
                         this.pathGraph[c.F1] = new List<RigidGraphNode>();
                     }
 
-                    if(!this.pathGraph.ContainsKey(c.F2))
+                    if (!this.pathGraph.ContainsKey(c.F2))
                     {
                         this.pathGraph[c.F2] = new List<RigidGraphNode>();
                     }
 
-                    var ccw =  c.F1.CrossCCW(c.V1, c.F2);
+                    var ccw = c.F1.CrossCCW(c.V1, c.F2);
                     var fromFace = ccw ? c.F1 : c.F2;
                     var targetFace = ccw ? c.F2 : c.F1;
                     if (c.V1.IsRealVertex)
                         this.pathGraph[fromFace].Add(new RigidGraphNode(c, fromFace, targetFace, c.V1));
                     if (c.V2.IsRealVertex)
-                        this.pathGraph[fromFace].Add(new RigidGraphNode(c, fromFace, targetFace, c.V2));
+                        this.pathGraph[targetFace].Add(new RigidGraphNode(c, targetFace, fromFace, c.V2));
                 });
         }
 
@@ -236,8 +231,7 @@ namespace SharpMASC.Origami.Model
             while(q.Count !=0)
             {
                 var f = q.Dequeue();
-
-                Console.WriteLine("fid = {0}", f.FaceId);
+                
                 orderedFaceList.Add(f);
 
                 var nodes = pathGraph[f];
