@@ -1,2 +1,5 @@
 *.cache
-/src/SharpMASC/bin/Debug
+*/bin/Debug
+*/bin/Release
+*/obj/Debug
+*/obj/Release
