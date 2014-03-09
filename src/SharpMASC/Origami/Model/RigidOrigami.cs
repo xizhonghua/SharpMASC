@@ -24,14 +24,9 @@ namespace SharpMASC.Origami.Model
 
 		public List<Vertex> RealVertices { get; private set; }
 
-		public Vector3d COM {
-			get { 
-				var com = new Vector3d ();
-				this.Faces.ForEach (f => com += f.Center);
-				com /= this.Faces.Count;
-				return com;
-			}
-		}
+		public Vector3d COM { get; private set; }
+
+		public double R { get; private set; }
 
 		public List<CFG> FoldingPath { get; private set; }
 
@@ -112,10 +107,13 @@ namespace SharpMASC.Origami.Model
 
 			this.BuildPathGraph ();
 
-			this.FindFoldingMapPath ();            
+			this.FindFoldingMapPath ();       
+
+			this.ComputeCOM_R ();
 
 			timer.Stop ();
 
+			Console.WriteLine ("COM = {0} R = {1}", this.COM, this.R);
 			Console.WriteLine ("Vertices = {0}/{1}", this.Vertices.Count, this.RealVertices.Count);
 			Console.WriteLine ("Faces = {0}", this.Faces.Count);
 			Console.WriteLine ("Creases = {0}/{1}", this.Creases.Count, this.importantCreases.Count);
@@ -385,6 +383,32 @@ namespace SharpMASC.Origami.Model
 			orderedFaceList.ForEach (f => {                
 				f.UpdateFoldingMap ();
 			});
+		}
+
+		void ComputeCOM_R ()
+		{
+			var bvs = Vertices.Where (v => {
+				return !v.IsRealVertex;
+			}).ToList ();
+
+			var com = new Vector3d ();
+
+			bvs.ForEach (v => {
+				com += v.Position;
+			});
+
+			com /= bvs.Count;
+
+			var r = 0.0;
+
+			bvs.ForEach (v => {
+				if ((v - com).Length > r)
+					r = (v - com).Length;
+			});
+
+			this.COM = com;
+			this.R = r;
+
 		}
 
 		#endregion

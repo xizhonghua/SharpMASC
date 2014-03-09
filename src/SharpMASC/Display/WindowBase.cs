@@ -66,7 +66,7 @@ namespace SharpMASC.Display
 
 		protected virtual void ResetCamera ()
 		{
-			this.Camera.UpdateZ (this.R * 2);
+			this.Camera.UpdateZ (this.R * 2.5f);
 			this.Translation = Vector3.Zero;
 			this.Rotation = new Vector3 (0.01f, 0, 0);
 		}
@@ -154,6 +154,8 @@ namespace SharpMASC.Display
 
 		protected override void OnResize (EventArgs e)
 		{
+			base.OnResize (e);
+
 			GL.Viewport (ClientRectangle);
 
 			float aspect = this.ClientSize.Width / (float)this.ClientSize.Height;

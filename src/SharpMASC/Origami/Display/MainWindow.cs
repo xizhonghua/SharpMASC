@@ -20,7 +20,7 @@ namespace SharpMASC.Origami.Display
 
 			GL.PushMatrix ();
 
-			GL.Translate (-this.Origami.COM);
+			GL.Translate (-this.COM);
 			this.DrawAll ();
 
 			GL.PopMatrix ();
@@ -240,6 +240,9 @@ namespace SharpMASC.Origami.Display
 			}
 
 			this.DC.CurrentFrameChanged += HandleCurrentFrameChanged;
+
+			this.COM = (Vector3)this.Origami.COM;
+			this.R = (float)this.Origami.R;
 
 			this.UpdateWindownTitle ();
 			this.ResetCamera ();
