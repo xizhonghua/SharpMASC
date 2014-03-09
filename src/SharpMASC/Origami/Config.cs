@@ -18,7 +18,7 @@ namespace SharpMASC.Origami
 	[Serializable]
 	public class Config
 	{
-		public List<ConfigEntry> Models { get; private set; }
+		public List<ConfigEntry> Models { get; set; }
 
 		public Config ()
 		{

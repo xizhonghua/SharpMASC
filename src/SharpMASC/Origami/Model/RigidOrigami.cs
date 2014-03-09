@@ -67,6 +67,9 @@ namespace SharpMASC.Origami.Model
 
 		public void Build (string path)
 		{
+			var timer = new Timer ();
+			timer.Start ();
+
 			Console.WriteLine ("-----------------------------------------------------------");
 			Console.WriteLine ("Building Origami form {0}", path);
 
@@ -111,14 +114,19 @@ namespace SharpMASC.Origami.Model
 
 			this.FindFoldingMapPath ();            
 
+			timer.Stop ();
 
 			Console.WriteLine ("Vertices = {0}/{1}", this.Vertices.Count, this.RealVertices.Count);
 			Console.WriteLine ("Faces = {0}", this.Faces.Count);
 			Console.WriteLine ("Creases = {0}/{1}", this.Creases.Count, this.importantCreases.Count);
+			Console.WriteLine ("Rigid origami built in {0}ms", timer.TimeElapsed);
 		}
 
 		public void LoadTrajectories (string path)
 		{
+			var timer = new Timer ();
+			timer.Start ();
+
 			this.FoldingPath = new List<CFG> ();
 			using (var sr = new StreamReader (path)) {
 				while (!sr.EndOfStream) {
@@ -130,7 +138,8 @@ namespace SharpMASC.Origami.Model
 				}
 			}
 
-			Console.WriteLine ("Folding Path loaded form {0}! Total {1} steps", path, this.FoldingPath.Count);
+			timer.Stop ();
+			Console.WriteLine ("Folding Path loaded form {0}! Total {1} steps in {2}ms", path, this.FoldingPath.Count, timer.TimeElapsed);
 		}
 
 		public void FoldToGoal ()

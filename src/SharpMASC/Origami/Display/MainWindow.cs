@@ -247,7 +247,7 @@ namespace SharpMASC.Origami.Display
 
 		void UpdateWindownTitle ()
 		{
-			this.Title = string.Format ("Origami[{0}/{1}] {2} Steps:{3}/{4}", currentModelIndex + 1, Config.Models.Count, Origami.Config.ModelPath, DC.CurrentFrame, DC.TotalFrame);
+			this.Title = string.Format ("[{0}/{1}] Origami {2} Steps:{3}/{4}", currentModelIndex + 1, Config.Models.Count, Origami.Config.ModelPath, DC.CurrentFrame, DC.TotalFrame);
 		}
 
 		void PrintGUIKeys ()
@@ -267,7 +267,7 @@ namespace SharpMASC.Origami.Display
 			Console.WriteLine ("a : Toggle showing assistant creases");
 			Console.WriteLine ("-- Dumping --");
 			Console.WriteLine ("M: Dump current state to obj file");
-			Console.WriteLine ("D: Dump deformation");
+			//.WriteLine ("D: Dump deformation");
 		}
 	}
 }
