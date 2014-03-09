@@ -69,6 +69,8 @@ namespace SharpMASC.Origami.Display
 
 		void DrawFace (Face f)
 		{
+            var c = f.FaceId *1.0f/Origami.Faces.Count;
+            GL.Color3(c, c*2, c*3);
 			for (var i = 0; i < 3; i++)
 				GL.Vertex3 (f.Vertices [i].Position);
 		}
@@ -116,10 +118,7 @@ namespace SharpMASC.Origami.Display
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            //if (Keyboard[OpenTK.Input.Key.A])
-            //{
-            //    DC.ShowAssistantCreases = !DC.ShowAssistantCreases;
-            //}
+            // your code here
 
             base.OnUpdateFrame(e);
         }
@@ -128,6 +127,10 @@ namespace SharpMASC.Origami.Display
         {
             if(e.Key == OpenTK.Input.Key.A)
                 DC.ShowAssistantCreases = !DC.ShowAssistantCreases;
+            if (e.Key == OpenTK.Input.Key.G)
+                Origami.FoldToGoal();
+            if (e.Key == OpenTK.Input.Key.I)
+                Origami.FoldToInital();
 
             base.OnKeyDown(e);
         }

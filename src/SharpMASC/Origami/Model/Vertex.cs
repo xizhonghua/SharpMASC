@@ -12,6 +12,8 @@ namespace SharpMASC.Origami.Model
 
 		public Vector3d Position { get; set; }
 
+        public Vector3d FlatPosition { get; set; }
+
 		public List<Crease> Creases { get; private set; }
 
 		public bool IsRealVertex { get; set; }
@@ -32,15 +34,39 @@ namespace SharpMASC.Origami.Model
 		public void SortCreases ()
 		{
 			this.Creases.Sort ((c1, c2) => {
-				return c1.GetPlaneAngle (this.VertexId).CompareTo (c1.GetPlaneAngle (this.VertexId));
+				return c1.GetPlaneAngle (this).CompareTo (c1.GetPlaneAngle (this));
 			});
 		}
 
-		#endregion
+        public override string ToString()
+        {
+            return string.Format("Vertex = {0} Pos = ({1})", this.VertexId, this.Position);
+        }
 
-		#region Operators
+        public Matrix4d GetLoopMatrix()
+        {
+            var M = Matrix4d.Identity;
 
-		public static Vector3d operator  - (Vertex l, Vertex r)
+            Creases.ForEach(c =>
+                {
+                    var A = Matrix4d.CreateRotationZ(c.GetPlaneAngle(this));
+                    var C = Matrix4d.CreateRotationX(c.FoldingAngle);
+                    var AI = Matrix4d.Transpose(A);
+
+                    var T = A * C * AI;
+                    M = M * T;
+                });
+
+            return M;
+        }
+
+
+
+        #endregion
+
+        #region Operators
+
+        public static Vector3d operator  - (Vertex l, Vertex r)
 		{
 			return l.Position - r.Position;
 		}

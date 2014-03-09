@@ -81,7 +81,7 @@ namespace SharpMASC.Origami.Model
 		public void UpdatePlaneAngles ()
 		{
 			var x = new Vector3d (1, 0, 0);
-			var v1 = (this.V1 - this.V2);
+            var v1 = (this.V2 - this.V1);
 			v1.Normalize ();
 			var v2 = -v1;
 			double pa1 = Math.Acos (v1.Dot (x));
@@ -145,11 +145,11 @@ namespace SharpMASC.Origami.Model
 			return alpha;
 		}
 
-		public double GetPlaneAngle (int witnessId)
+		public double GetPlaneAngle (Vertex witnessVertex)
 		{
-			if (witnessId == this.V1.VertexId)
+            if (witnessVertex == this.V1)
 				return this.PlaneAngle1;
-			if (witnessId == this.V2.VertexId)
+            if (witnessVertex == this.V2)
 				return this.PlaneAngle2;
 
 			throw new ArgumentException ("witnessId");

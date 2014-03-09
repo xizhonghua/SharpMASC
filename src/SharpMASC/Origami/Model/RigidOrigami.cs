@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using OpenTK;
 using System.Linq;
+using SharpMASC.Utils;
 
 namespace SharpMASC.Origami.Model
 {
@@ -98,9 +99,48 @@ namespace SharpMASC.Origami.Model
 			Console.WriteLine ("Creases = {0}", this.Creases.Count);          
 		}
 
+
+        public void FoldToGoal()
+        {
+            Creases.ForEach(c =>
+                {
+                    c.FoldingAngle = c.GoalFoldingAngles[c.GoalFoldingAngles.Count - 1];
+                });
+
+            this.FoldToCurrent();            
+        }
+
+        public void FoldToInital()
+        {
+            Creases.ForEach(c =>
+            {
+                c.FoldingAngle = c.GoalFoldingAngles[0];
+            });
+
+            this.FoldToCurrent();
+        }
+
 		#endregion
 
 		#region Private Methods
+
+        void FoldToCurrent()
+        {
+            var t = new Timer();
+
+            t.Start();
+
+            UpdateFoldingMap();            
+
+            Faces.ForEach(f =>
+            {
+                f.ApplyFoldingMap();
+            });
+
+            t.Stop();
+
+            Console.WriteLine("FoldToCurrent Time = {0}ms", t.TimeElapsed);
+        }
 
 		void CreateVertex (string line)
 		{
@@ -110,6 +150,8 @@ namespace SharpMASC.Origami.Model
 				VertexId = this.vid++,
 				Position = new Vector3d (double.Parse (items [0]), double.Parse (items [1]), double.Parse (items [2]))
 			};
+
+            vertex.FlatPosition = vertex.Position;
 
 			this.Vertices.Add (vertex);
 		}
@@ -242,9 +284,21 @@ namespace SharpMASC.Origami.Model
                     if (targetFace.PathFound) return;
                     targetFace.PathFound = true;
                     targetFace.ParentFace = f;
+                    targetFace.Node = node;
                     q.Enqueue(targetFace);
                 });
             }
+        }
+
+
+        void UpdateFoldingMap()
+        {
+            this.Faces[0].FoldingMap = Matrix4d.Identity;
+
+            orderedFaceList.ForEach(f=>
+            {                
+                f.UpdateFoldingMap();
+            });
         }
 
 		#endregion

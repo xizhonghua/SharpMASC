@@ -12,17 +12,21 @@ namespace SharpMASC.Origami.Model
 
 		public Vertex[] Vertices { get; set; }
 
-		public Matrix4 FoldingMap { get; set; }
+		public Matrix4d FoldingMap { get; set; }
 
 		public bool PathFound { get; set; }
 
 		public Face ParentFace { get; set; }
 
+        public RigidGraphNode Node { get; set; }
+
 		public Vector3d Normal {
 			get { 
-				var e2 = Vertices [2].Position - Vertices [0].Position;
-				var e1 = Vertices [1].Position - Vertices [1].Position;
-				return Vector3d.Cross (e2, e1);
+				var e2 = Vertices [2] - Vertices [0];
+				var e1 = Vertices [1] - Vertices [0];
+				var n = Vector3d.Cross (e2, e1);
+                n.Normalize();
+                return n;
 			}
 		}
 
@@ -38,7 +42,7 @@ namespace SharpMASC.Origami.Model
 		{
 			this.FaceId = faceId;
 			this.Vertices = new Vertex[3];
-			this.FoldingMap = Matrix4.Identity;
+			this.FoldingMap = Matrix4d.Identity;
 			this.ParentFace = null;
 		}
 
@@ -96,6 +100,42 @@ namespace SharpMASC.Origami.Model
 			return cross > 0;
 		}
 
+        public void UpdateFoldingMap()
+        {
+            if (this.ParentFace == null)
+            {
+                this.FoldingMap = Matrix4d.Identity;
+            }
+            else
+            {
+                if(Node.Crease.IsAssistant)
+                {
+                    this.FoldingMap = this.ParentFace.FoldingMap;
+                    return;   
+                }                
+
+                var B = Matrix4d.CreateTranslation(-Node.WitnessVertex.FlatPosition);
+                var A = Matrix4d.CreateRotationZ(-Node.PlaneAngle);
+                var C = Matrix4d.CreateRotationX(-Node.Crease.FoldingAngle);
+                var AI = Matrix4d.Transpose(A);
+                var BI = Matrix4d.CreateTranslation(Node.WitnessVertex.FlatPosition);
+
+
+                var M = B * A * C * AI * BI;
+
+                this.FoldingMap = M * ParentFace.FoldingMap;               
+            }
+        }
+
+        public void ApplyFoldingMap()
+        {                      
+            for(var i=0;i<3;i++)
+            {
+                var v = this.Vertices[i].FlatPosition;
+                this.Vertices[i].Position = Vector4d.Transform(v.ToVector4d(), this.FoldingMap).ToVector3d();                
+            }         
+        }
+
         public override int GetHashCode()
         {
             return this.FaceId.GetHashCode();
@@ -109,4 +149,3 @@ namespace SharpMASC.Origami.Model
 		#endregion
 	}
 }
-
