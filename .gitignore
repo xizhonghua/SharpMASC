@@ -1,6 +1,7 @@
 *.cache
-*/bin/Debug
-*/bin/Release
-*/obj/Debug
-*/obj/Release
+*.user
 *.suo
+src/SharpMASC/*/bin/*
+src/SharpMASC/*/obj/*
+src/*/bin/*
+src/*/obj/*
