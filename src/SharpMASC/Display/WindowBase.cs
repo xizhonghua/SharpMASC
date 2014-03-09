@@ -55,13 +55,20 @@ namespace SharpMASC.Display
 			this.COM = new Vector3 ();
 			this.R = 1.0f;
 
-			this.Camera.UpdateZ (this.R * 3);
+			this.ResetCamera ();
 
 			this.BackgroundColor = Color.MidnightBlue;
 
 			this.Mouse.ButtonDown += HandleButtonDown;
 			this.Mouse.ButtonUp += HandleButtonUp;
 			this.Mouse.Move += HandleMouseMove;
+		}
+
+		protected virtual void ResetCamera ()
+		{
+			this.Camera.UpdateZ (this.R * 2);
+			this.Translation = Vector3.Zero;
+			this.Rotation = new Vector3 (0.01f, 0, 0);
 		}
 
 		#endregion
