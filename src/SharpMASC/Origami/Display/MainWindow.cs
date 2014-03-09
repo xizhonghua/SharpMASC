@@ -3,6 +3,7 @@ using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 using SharpMASC.Display;
 using SharpMASC.Origami.Model;
 
@@ -120,6 +121,17 @@ namespace SharpMASC.Origami.Display
         {
             // your code here
 
+            if (Keyboard [Key.Comma])
+            {
+                DC.CurrentFrame++;
+                Origami.FoldToPercent(DC.Percent);
+            }
+            if(Keyboard[Key.Period])
+            {
+                DC.CurrentFrame--;
+                Origami.FoldToPercent(DC.Percent);
+            }
+
             base.OnUpdateFrame(e);
         }
 
@@ -127,10 +139,17 @@ namespace SharpMASC.Origami.Display
         {
             if(e.Key == OpenTK.Input.Key.A)
                 DC.ShowAssistantCreases = !DC.ShowAssistantCreases;
-            if (e.Key == OpenTK.Input.Key.G)
+            if (e.Key == OpenTK.Input.Key.T)
+            { 
                 Origami.FoldToGoal();
-            if (e.Key == OpenTK.Input.Key.I)
+                DC.CurrentFrame = DC.TotalFrame;
+            }
+            if (e.Key == OpenTK.Input.Key.R)
+            { 
                 Origami.FoldToInital();
+                DC.CurrentFrame = 0;
+            }
+            
 
             base.OnKeyDown(e);
         }

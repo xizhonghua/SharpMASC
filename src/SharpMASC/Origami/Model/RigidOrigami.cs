@@ -120,6 +120,22 @@ namespace SharpMASC.Origami.Model
             this.FoldToCurrent();
         }
 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="percent">0~1</param>
+        public void FoldToPercent(double percent)
+        {
+            Console.WriteLine("FoldToPercent = {0}", percent);
+            Creases.ForEach(c=>
+            {
+                c.FoldingAngle = percent * c.GoalFoldingAngles[c.GoalFoldingAngles.Count-1] + (1.0-percent)*c.GoalFoldingAngles[0];
+            });
+
+            FoldToCurrent();
+        }
+
 		#endregion
 
 		#region Private Methods
