@@ -6,11 +6,30 @@ namespace SharpMASC.Origami
 {
 	class MainClass
 	{
-		private static bool ParseArgs (string[] args)
+		private static bool ParseArgs (string[] args, out Config config)
 		{
-			if (args.Length == 0)
-				return false;
-			return true;
+            config = new Config();
+
+			if (args.Length == 0)            
+				return false;            
+
+            var i = 0;
+            while(i<args.Length)
+            {
+                var arg = args[i];
+                if(arg == "-traj")
+                {
+                    config.HasTrajectories = true;
+                    config.TrajectoriesPath = args[++i];
+                }
+                else
+                {
+                    config.ModelPath = arg;
+                }
+                ++i;
+            }
+
+            return !string.IsNullOrWhiteSpace(config.ModelPath);
 		}
 
 		private static void PrintUsage ()
@@ -20,14 +39,18 @@ namespace SharpMASC.Origami
 
 		public static void Main (string[] args)
 		{
-			if (!ParseArgs (args)) {
+            Config config;
+			if (!ParseArgs (args, out config)) {
 				PrintUsage ();
 				return;
 			}
 
-			var origami = new RigidOrigami ();
+            var origami = new RigidOrigami(config);
 
-			origami.Build (args [0]);
+            origami.Build(config.ModelPath);
+
+            if (config.HasTrajectories)
+                origami.LoadTrajectories(config.TrajectoriesPath);
 
 			using (var w = new MainWindow (origami)) {
 				w.Title = "Origami " + args [0];

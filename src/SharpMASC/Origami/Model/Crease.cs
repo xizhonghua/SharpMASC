@@ -39,6 +39,16 @@ namespace SharpMASC.Origami.Model
 
 		public Crease Refer { get; set; }
 
+        public int GroupId { get; set; }
+
+        public bool SameType
+        {
+            get
+            {
+                return this.CreaseType == Refer.CreaseType;
+            }
+        }
+
 		public bool IsSameTypeToRefer {
 			get {
 				if (Refer == null)
@@ -51,16 +61,26 @@ namespace SharpMASC.Origami.Model
 
 		public double PlaneAngle2 { get; set; }
 
-		public double FoldingAngle { get; set; }
+		public double FoldingAngle {
+            get
+            {                
+                var angle = this.Refer.foldingAngle;
+                if (IsSameTypeToRefer) return angle;
+                return -angle;
+            }
+            set
+            {
+                foldingAngle = Math.Abs(value);
+                if (this.IsValley) foldingAngle = -foldingAngle;
+            }
+        }
 
 		public List<double> GoalFoldingAngles { get; private set; }
 
 		#endregion
 
-		#region Fields
-
-		bool crossed1;
-		bool crossed2;
+		#region Fields	
+        double foldingAngle;
 
 		#endregion
 
@@ -89,42 +109,7 @@ namespace SharpMASC.Origami.Model
 
 			this.PlaneAngle1 = v1.Y < 0 ? 2 * Math.PI - pa1 : pa1;
 			this.PlaneAngle2 = v2.Y < 0 ? 2 * Math.PI - pa2 : pa2;
-		}
-
-		public bool IsCrossed (int witnessId)
-		{
-			if (witnessId != this.V1.VertexId && witnessId != this.V2.VertexId)
-				throw new ArgumentException ("witnessId");
-
-			if (witnessId == this.V1.VertexId)
-				return crossed1;
-			else
-				return crossed2;
-		}
-
-		public void Cross (int witnessId)
-		{
-			if (witnessId != this.V1.VertexId && witnessId != this.V2.VertexId)
-				throw new ArgumentException ("witnessId");
-
-			if (witnessId == this.V1.VertexId)
-				crossed1 = true;
-
-			if (witnessId == this.V2.VertexId)
-				crossed2 = true;
-		}
-
-		public void UnCross (int witnessId)
-		{
-			if (witnessId != this.V1.VertexId && witnessId != this.V2.VertexId)
-				throw new ArgumentException ("witnessId");
-
-			if (witnessId == this.V1.VertexId)
-				crossed1 = false;
-
-			if (witnessId == this.V2.VertexId)
-				crossed2 = false;
-		}
+		}	
 
 		public double ComputeFoldingAngle ()
 		{
@@ -154,6 +139,11 @@ namespace SharpMASC.Origami.Model
 
 			throw new ArgumentException ("witnessId");
 		}
+
+        public override string ToString()
+        {
+            return string.Format("Crease {0}", this.CreaseId);
+        }
 
 		#endregion
 	}

@@ -37,6 +37,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="Display\DisplayConfig.cs" />
     <Compile Include="Model\RigidGraphNode.cs" />
     <Compile Include="Program.cs" />

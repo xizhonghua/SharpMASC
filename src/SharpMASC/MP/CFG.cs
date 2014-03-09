@@ -48,7 +48,6 @@ namespace SharpMASC.MP
         protected double[] data;
         #endregion
 
-
         #region Constructor
         public CFG(int dof)
         {
@@ -68,8 +67,18 @@ namespace SharpMASC.MP
             this.DOF = data.Length;
         }
 
+        public CFG(IEnumerable<string> cfg)
+        {
+            var array = cfg.ToArray();
+            this.DOF = array.Length;
+            this.data = new double[this.DOF];
+            for (var i = 0; i < this.DOF; ++i)
+                this.data[i] = double.Parse(array[i]);
+        }
+
         #endregion
 
+        #region Public Methods
         public CFG Clone()
         {
             return new CFG(this);
@@ -87,8 +96,17 @@ namespace SharpMASC.MP
             this.data.CopyTo(array, 0);
             return array;
         }
+        #endregion
 
         #region Static Methods
+
+        public static CFG operator -(CFG cfg)
+        {
+            var c = new CFG(cfg);
+            for(var i=0;i<c.data.Length;i++)
+                c.data[i] = - c.data[i];
+            return c;
+        }
 
         public static CFG operator +(CFG l, CFG r)
         {        

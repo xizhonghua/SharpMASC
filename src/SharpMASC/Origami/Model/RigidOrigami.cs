@@ -4,12 +4,16 @@ using System.IO;
 using OpenTK;
 using System.Linq;
 using SharpMASC.Utils;
+using SharpMASC.MP;
+using SharpMASC.Extension;
 
 namespace SharpMASC.Origami.Model
 {
 	public class RigidOrigami
 	{
 		#region Property
+
+        public Config Config {get; private set;}
 
 		public List<Crease> Creases { get; private set; }
 
@@ -35,20 +39,26 @@ namespace SharpMASC.Origami.Model
 		private int vid;
 		private int fid;
 		private int cid;
+        private int gid;
 
         private Dictionary<Face, List<RigidGraphNode>> pathGraph;
 
         private List<Face> orderedFaceList;
 
+        private List<Crease> importantCreases;
+
+        private List<CFG> foldPathing;        
 		#endregion
 
         #region Constructor
-        public RigidOrigami ()
+        public RigidOrigami (Config config)
 		{
+            this.Config = config;
 			this.Creases = new List<Crease> ();
 			this.Vertices = new List<Vertex> ();
 			this.Faces = new List<Face> ();
             this.RealVertices = new List<Vertex>();
+            this.importantCreases = new List<Crease>();
 		}
 
         #endregion
@@ -79,7 +89,17 @@ namespace SharpMASC.Origami.Model
 						this.CreateCrease (line);
 					} else if (t == '#' && line [0] == 'e') {
 						this.CreateCrease (line.Substring (1));
-					}
+                    }
+                    else if (t == 's')
+                    {
+                        // reset gid
+                        if (gid == this.Creases.Count)
+                        {
+                            gid = 0;
+                            importantCreases.Clear();
+                        }
+                        this.CreateSymmetry(line);
+                    }
 				}
 			}
 
@@ -91,13 +111,31 @@ namespace SharpMASC.Origami.Model
 
             this.BuildPathGraph();
 
-            this.FindFoldingMapPath();
+            this.FindFoldingMapPath();            
 
 
             Console.WriteLine("Vertices = {0}/{1}", this.Vertices.Count, this.RealVertices.Count);
 			Console.WriteLine ("Faces = {0}", this.Faces.Count);
-			Console.WriteLine ("Creases = {0}", this.Creases.Count);          
+            Console.WriteLine("Creases = {0}/{1}", this.Creases.Count, this.importantCreases.Count);
 		}
+
+        public void LoadTrajectories(string path)
+        {
+            this.foldPathing = new List<CFG>();
+            using (var sr = new StreamReader(path))
+            {
+                while (!sr.EndOfStream)
+                {
+                    var items = sr.ReadLine().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    var cfg = new CFG(items);
+                    for (var i = 0; i < cfg.DOF; ++i)
+                        cfg[i] = cfg[i].ToRad();
+                    this.foldPathing.Add(cfg);
+                }
+            }
+
+            Console.WriteLine("Folding Path loaded! Total {0} steps", this.foldPathing.Count);
+        }
 
 
         public void FoldToGoal()
@@ -112,7 +150,7 @@ namespace SharpMASC.Origami.Model
 
         public void FoldToInital()
         {
-            Creases.ForEach(c =>
+            importantCreases.ForEach(c =>
             {
                 c.FoldingAngle = c.GoalFoldingAngles[0];
             });
@@ -128,10 +166,23 @@ namespace SharpMASC.Origami.Model
         public void FoldToPercent(double percent)
         {
             Console.WriteLine("FoldToPercent = {0}", percent);
-            Creases.ForEach(c=>
+
+
+            if (this.foldPathing.Count > 0)
             {
-                c.FoldingAngle = percent * c.GoalFoldingAngles[c.GoalFoldingAngles.Count-1] + (1.0-percent)*c.GoalFoldingAngles[0];
-            });
+                var index = (int)(percent*(this.foldPathing.Count-1));
+                importantCreases.ForEach(c =>
+                {
+                    c.FoldingAngle = this.foldPathing[index][c.GroupId];
+                });
+            }
+            else
+            {
+                importantCreases.ForEach(c =>
+                {
+                    c.FoldingAngle = percent * c.GoalFoldingAngles[c.GoalFoldingAngles.Count - 1] + (1.0 - percent) * c.GoalFoldingAngles[0];
+                });
+            }
 
             FoldToCurrent();
         }
@@ -206,8 +257,11 @@ namespace SharpMASC.Origami.Model
             {
                 CreaseType = creaseType,
                 V1 = this.Vertices [vid1],
-                V2 = this.Vertices [vid2]
+                V2 = this.Vertices [vid2],
+                GroupId = this.gid++
             };
+
+            this.importantCreases.Add(c);
 
 			for (var i = 3; i < items.Length; ++i) {
 				var goalAngle = Math.Abs (double.Parse (items [i]));
@@ -232,6 +286,24 @@ namespace SharpMASC.Origami.Model
 
 			this.Creases.Add (c);            
 		}
+
+        void CreateSymmetry(string line)
+        {
+            var items = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var parentCreaseId = int.Parse(items[0]) - 1;
+
+            var parentCrease = Creases.FirstOrDefault(c => c.CreaseId == parentCreaseId);
+            parentCrease.GroupId = gid++;
+            importantCreases.Add(parentCrease);            
+
+            for(var i=1;i<items.Length;++i)
+            {
+                var childCreaseId = int.Parse(items[i]) - 1;
+                var childCrease = Creases.FirstOrDefault(c => c.CreaseId == childCreaseId);
+                childCrease.Refer = parentCrease;
+            }
+        }
 
         void ComputePlaneAngles()
         {
