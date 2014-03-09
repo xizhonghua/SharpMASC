@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Models>
+    <ConfigEntry>
+      <TrajectoriesPath>comp/miura_3_3_md_0.0001_us.trj</TrajectoriesPath>
+      <ModelPath>comp/miura_24_24_30.obj</ModelPath>
+    </ConfigEntry>
+    <ConfigEntry>
+      <ModelPath>comp/miura_3_3_30.obj</ModelPath>
+      <TrajectoriesPath>comp/miura_3_3_md_0.0001_us.trj</TrajectoriesPath>
+    </ConfigEntry>
+    <ConfigEntry>
+      <ModelPath>comp/quad_3_3.obj</ModelPath>
+      <TrajectoriesPath>comp/quad_3_3_md_0.001_us.trj</TrajectoriesPath>
+    </ConfigEntry>
+    <ConfigEntry>
+      <ModelPath>comp/quad_4_4.obj</ModelPath>
+      <TrajectoriesPath>comp/quad_3_3_md_0.001_us.trj</TrajectoriesPath>
+    </ConfigEntry>
+    <ConfigEntry>
+      <ModelPath>comp/quad_24_24.obj</ModelPath>
+      <TrajectoriesPath>comp/quad_3_3_md_0.001_us.trj</TrajectoriesPath>
+    </ConfigEntry>
+    <ConfigEntry>
+      <ModelPath>comp/wb_4_6_Flat.obj</ModelPath>
+      <TrajectoriesPath>comp/wb_4_6_Flat_md_0.001_us.trj</TrajectoriesPath>
+    </ConfigEntry>
+    <ConfigEntry>
+      <ModelPath>comp/wb_24_22_Flat.obj</ModelPath>
+      <TrajectoriesPath>comp/wb_4_6_Flat_md_0.001_us.trj</TrajectoriesPath>
+    </ConfigEntry>
+    <ConfigEntry>
+      <ModelPath>comp/wb_4_6_Cylinder.obj</ModelPath>
+      <TrajectoriesPath>comp/wb_4_6_Cylinder_md_0.001_us.trj</TrajectoriesPath>
+    </ConfigEntry>
+    <ConfigEntry>
+      <ModelPath>comp/wb_12_14_Cylinder.obj</ModelPath>
+      <TrajectoriesPath>comp/wb_4_6_Cylinder_md_0.001_us.trj</TrajectoriesPath>
+    </ConfigEntry>
+  </Models>
+</Config>
