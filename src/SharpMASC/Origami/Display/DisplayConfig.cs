@@ -22,6 +22,8 @@ namespace SharpMASC.Origami.Display
 
 		public bool ShowAssistantCreases { get; set; }
 
+        public bool InAnimation { get; set; }
+
 		public int CurrentFrame { 
 			get {
 				return currentFrame;

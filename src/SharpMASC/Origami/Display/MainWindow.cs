@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using SharpMASC.Display;
 using SharpMASC.Origami.Model;
+using SharpMASC.Extension;
 using System.IO;
 
 namespace SharpMASC.Origami.Display
@@ -157,55 +158,69 @@ namespace SharpMASC.Origami.Display
 
 			if (Keyboard [Key.Comma]) {
 				DC.CurrentFrame++;
+                DC.InAnimation = false;
 			}
 			if (Keyboard [Key.Period]) {
 				DC.CurrentFrame--;
+                DC.InAnimation = false;
 			}
+
+            if (DC.InAnimation)
+            {
+                DC.CurrentFrame++;
+                if (DC.CurrentFrame == DC.TotalFrame) DC.InAnimation = false;
+            }
 
 			base.OnUpdateFrame (e);
 		}
 
-		protected override void OnKeyPress (KeyPressEventArgs e)
-		{
-			switch (e.KeyChar) {
-			case 'a':
-				DC.ShowAssistantCreases = !DC.ShowAssistantCreases;
-				break;
-			case 't':
-				Origami.FoldToGoal ();
-				break;
-			case 'r':
-				Origami.FoldToInital ();
-				break;
-			case '[':
-				DC.CurrentFrame++;
-				break;
-			case ']':
-				DC.CurrentFrame--;
-				break;
-			case '?':
-				this.PrintGUIKeys ();
-				break;
-			case 'M':
-				var filename = string.Format ("{0}_{1}_{2}.obj", Path.GetFileNameWithoutExtension (Origami.Config.ModelPath), DC.CurrentFrame, DC.TotalFrame);
-				Origami.DumpObj (filename);
-				Console.WriteLine ("Obj file saved to: {0}", filename);
-				break;
-			case 'n':
-				if (this.currentModelIndex < Config.Models.Count - 1) {
-					this.currentModelIndex++;
-					this.LoadModel ();
-				}
-				break;
-			case 'p':
-				if (this.currentModelIndex > 0) {
-					this.currentModelIndex--;
-					this.LoadModel ();
-				}
-				break;
-			}
-			base.OnKeyPress (e);
-		}
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            switch (e.KeyChar)
+            {
+                case ' ':
+                    DC.InAnimation = !DC.InAnimation;
+                    break;
+                case 'a':
+                    DC.ShowAssistantCreases = !DC.ShowAssistantCreases;
+                    break;
+                case 't':
+                    Origami.FoldToGoal();
+                    break;
+                case 'r':
+                    Origami.FoldToInital();
+                    break;
+                case '[':
+                    DC.CurrentFrame++;
+                    break;
+                case ']':
+                    DC.CurrentFrame--;
+                    break;
+                case '?':
+                    this.PrintGUIKeys();
+                    break;
+                case 'M':
+                    var filename = string.Format("{0}_{1}_{2}.obj", Path.GetFileNameWithoutExtension(Origami.Config.ModelPath), DC.CurrentFrame, DC.TotalFrame);
+                    Origami.DumpObj(filename);
+                    Console.WriteLine("Obj file saved to: {0}", filename);
+                    break;
+                case 'n':
+                    if (this.currentModelIndex < Config.Models.Count - 1)
+                    {
+                        this.currentModelIndex++;
+                        this.LoadModel();
+                    }
+                    break;
+                case 'p':
+                    if (this.currentModelIndex > 0)
+                    {
+                        this.currentModelIndex--;
+                        this.LoadModel();
+                    }
+                    break;
+            }
+            base.OnKeyPress(e);
+        }
 
 		protected override void Init ()
 		{
@@ -256,20 +271,21 @@ namespace SharpMASC.Origami.Display
 		void PrintGUIKeys ()
 		{
 			Console.WriteLine ("-- Origami --");
-			Console.WriteLine ("? : Display this message");
-			Console.WriteLine ("n: Next model");
-			Console.WriteLine ("p: Previous model");
+			Console.WriteLine ("?    : Display this message");
+			Console.WriteLine ("n    : Next model");
+			Console.WriteLine ("p    : Previous model");
 			Console.WriteLine ("-- Folding --");
-			Console.WriteLine (", : Fold");
-			Console.WriteLine (". : Unfold");
-			Console.WriteLine ("[ : Fold (one step)");
-			Console.WriteLine ("] : Unfold (one step)");
-			Console.WriteLine ("t : Folding to goal state");
-			Console.WriteLine ("r : Folding to initial state");
+            Console.WriteLine("space : Toggle Animation");
+			Console.WriteLine (",    : Fold");
+			Console.WriteLine (".    : Unfold");
+			Console.WriteLine ("[    : Fold (one step)");
+			Console.WriteLine ("]    : Unfold (one step)");
+			Console.WriteLine ("t    : Folding to goal state");
+			Console.WriteLine ("r    : Folding to initial state");
 			Console.WriteLine ("-- Display --");
-			Console.WriteLine ("a : Toggle showing assistant creases");
+			Console.WriteLine ("a    : Toggle showing assistant creases");
 			Console.WriteLine ("-- Dumping --");
-			Console.WriteLine ("M: Dump current state to obj file");
+			Console.WriteLine ("M    : Dump current state to obj file");
 			//.WriteLine ("D: Dump deformation");
 		}
 	}

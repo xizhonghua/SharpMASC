@@ -36,6 +36,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extension\BooleanExtension.cs" />
     <Compile Include="Extension\FloatingExtension.cs" />
     <Compile Include="MP\CFG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
